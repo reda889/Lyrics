@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LYRIMOTION — Kinetic Lyric Video Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated background particles -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="grain-overlay"></div>
+
+  <header class="site-header">
+    <div class="logo">
+      <span class="logo-mark">◈</span>
+      <span class="logo-text">LYRIMOTION</span>
+    </div>
+    <div class="header-tag">Kinetic Typography Engine</div>
+  </header>
+
+  <main class="app-shell">
+
+    <!-- LEFT PANEL: Controls -->
+    <aside class="control-panel" id="controlPanel">
+      <div class="panel-scroll">
+
+        <section class="control-section">
+          <div class="section-label"><span class="section-num">01</span> Audio Source</div>
+          <div class="upload-zone" id="audioDropZone">
+            <input type="file" id="audioFile" accept="audio/*" hidden />
+            <div class="upload-icon">♫</div>
+            <div class="upload-text">Drop audio file here</div>
+            <div class="upload-sub">MP3, WAV, OGG supported</div>
+            <button class="btn-upload" onclick="document.getElementById('audioFile').click()">Browse Files</button>
+          </div>
+          <div class="file-info" id="audioFileInfo" style="display:none"></div>
+        </section>
+
+        <section class="control-section">
+          <div class="section-label"><span class="section-num">02</span> Lyrics (Enhanced LRC)</div>
+          <div class="lyrics-help">
+            <details>
+              <summary>Format Guide ▾</summary>
+              <pre class="format-example">[mm:ss.ms] Line start
+[00:10.300] في &lt;00:10.300&gt; عالم &lt;00:12.500&gt; يجتاحه الظلم</pre>
+            </details>
+          </div>
+          <textarea id="lyricsInput" class="lyrics-textarea" placeholder="[00:05.000] Hello &lt;00:05.000&gt; world &lt;00:06.500&gt; this &lt;00:07.200&gt; is &lt;00:08.000&gt; kinetic typography&#10;[00:10.000] Every &lt;00:10.000&gt; word &lt;00:11.000&gt; comes &lt;00:12.000&gt; alive&#10;[00:14.000] Feel &lt;00:14.000&gt; the &lt;00:15.000&gt; rhythm &lt;00:16.000&gt; of &lt;00:17.000&gt; the &lt;00:17.500&gt; music" spellcheck="false"></textarea>
+        </section>
+
+        <section class="control-section">
+          <div class="section-label"><span class="section-num">03</span> Animation Style</div>
+          <div class="style-picker">
+            <label class="style-card active" id="styleCardDynamic">
+              <input type="radio" name="animStyle" value="dynamic" checked hidden />
+              <div class="style-card-icon">⚡</div>
+              <div class="style-card-name">Dynamic Trend</div>
+              <div class="style-card-desc">Hormozi / TikTok viral style</div>
+            </label>
+            <label class="style-card" id="styleCardTypewriter">
+              <input type="radio" name="animStyle" value="typewriter" hidden />
+              <div class="style-card-icon">✦</div>
+              <div class="style-card-name">Typewriter</div>
+              <div class="style-card-desc">Sequential word reveal</div>
+            </label>
+          </div>
+        </section>
+
+        <section class="control-section">
+          <div class="section-label"><span class="section-num">04</span> Visual Style</div>
+
+          <div class="control-row">
+            <label class="ctrl-label">Canvas Size</label>
+            <div class="segmented-control">
+              <button class="seg-btn active" data-size="1080">1080×1080</button>
+              <button class="seg-btn" data-size="720">720×720</button>
+            </div>
+          </div>
+
+          <div class="control-row">
+            <label class="ctrl-label">Background</label>
+            <div class="color-palette" id="bgPalette">
+              <div class="swatch active" data-color="#0a0a0f" style="background:#0a0a0f" title="Void Black"></div>
+              <div class="swatch" data-color="#1a0a2e" style="background:#1a0a2e" title="Deep Purple"></div>
+              <div class="swatch" data-color="#0d1f2d" style="background:#0d1f2d" title="Midnight Blue"></div>
+              <div class="swatch" data-color="#1a1a0a" style="background:#1a1a0a" title="Dark Olive"></div>
+              <div class="swatch" data-color="#ffffff" style="background:#ffffff;border:2px solid #ddd" title="Pure White"></div>
+              <div class="swatch custom-swatch" title="Custom color">
+                <input type="color" id="bgColorCustom" value="#0a0a0f" />
+                <span>+</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="control-row">
+            <label class="ctrl-label">Text Color</label>
+            <div class="color-palette" id="textPalette">
+              <div class="swatch active" data-color="#ffffff" style="background:#ffffff;border:2px solid #ccc" title="White"></div>
+              <div class="swatch" data-color="#FFE566" style="background:#FFE566" title="Golden Yellow"></div>
+              <div class="swatch" data-color="#FF6B9D" style="background:#FF6B9D" title="Hot Pink"></div>
+              <div class="swatch" data-color="#00F5FF" style="background:#00F5FF" title="Cyan"></div>
+              <div class="swatch" data-color="#B8FF65" style="background:#B8FF65" title="Lime"></div>
+              <div class="swatch custom-swatch" title="Custom color">
+                <input type="color" id="textColorCustom" value="#ffffff" />
+                <span>+</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="control-row">
+            <label class="ctrl-label">Highlight Color</label>
+            <div class="color-palette" id="highlightPalette">
+              <div class="swatch active" data-color="#FFE566" style="background:#FFE566" title="Golden"></div>
+              <div class="swatch" data-color="#FF6B9D" style="background:#FF6B9D" title="Pink"></div>
+              <div class="swatch" data-color="#00F5FF" style="background:#00F5FF" title="Cyan"></div>
+              <div class="swatch" data-color="#FF7043" style="background:#FF7043" title="Orange"></div>
+              <div class="swatch" data-color="#B8FF65" style="background:#B8FF65" title="Lime"></div>
+              <div class="swatch custom-swatch" title="Custom color">
+                <input type="color" id="highlightColorCustom" value="#FFE566" />
+                <span>+</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="control-row">
+            <label class="ctrl-label">Font Family</label>
+            <select class="ctrl-select" id="fontFamily">
+              <option value="'Syne', sans-serif">Syne (Modern)</option>
+              <option value="'Space Mono', monospace">Space Mono (Tech)</option>
+              <option value="'Playfair Display', serif">Playfair Display (Elegant)</option>
+              <option value="Arial Black, sans-serif">Arial Black (Bold)</option>
+              <option value="Georgia, serif">Georgia (Classic)</option>
+              <option value="Impact, sans-serif">Impact (Aggressive)</option>
+            </select>
+          </div>
+
+          <div class="control-row">
+            <label class="ctrl-label">Text Direction</label>
+            <div class="segmented-control">
+              <button class="seg-btn active" data-dir="ltr">LTR</button>
+              <button class="seg-btn" data-dir="rtl">RTL (Arabic)</button>
+            </div>
+          </div>
+
+        </section>
+
+        <div class="action-buttons">
+          <button class="btn-primary" id="generateBtn">
+            <span class="btn-icon">▶</span> Generate & Preview
+          </button>
+          <button class="btn-secondary" id="exportBtn" disabled>
+            <span class="btn-icon">↓</span> Export Video
+          </button>
+        </div>
+
+        <div class="export-status" id="exportStatus" style="display:none">
+          <div class="status-bar">
+            <div class="status-fill" id="statusFill"></div>
+          </div>
+          <div class="status-text" id="statusText">Preparing export...</div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- RIGHT PANEL: Preview -->
+    <section class="preview-panel">
+      <div class="preview-header">
+        <span class="preview-label">PREVIEW</span>
+        <div class="preview-time" id="previewTime">00:00.000</div>
+      </div>
+
+      <div class="canvas-wrapper" id="canvasWrapper">
+        <div class="canvas-frame">
+          <canvas id="mainCanvas"></canvas>
+          <div class="canvas-idle-msg" id="canvasIdleMsg">
+            <div class="idle-icon">◈</div>
+            <div class="idle-text">Upload audio & add lyrics<br>then hit Generate</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="audio-player-section">
+        <audio id="audioPlayer" controls style="display:none"></audio>
+        <div class="player-placeholder" id="playerPlaceholder">
+          <div class="placeholder-wave">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="placeholder-text">Audio player will appear here</div>
+        </div>
+      </div>
+
+      <!-- Live word display -->
+      <div class="word-ticker" id="wordTicker">
+        <span class="ticker-label">NOW PLAYING</span>
+        <span class="ticker-word" id="tickerWord">—</span>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="parser.js"></script>
+  <script src="animator.js"></script>
+  <script src="exporter.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
